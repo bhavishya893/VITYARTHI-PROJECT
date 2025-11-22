@@ -1,0 +1,132 @@
+import numpy as np
+import sys
+!pip install pyfiglet
+import pyfiglet
+
+print(pyfiglet.figlet_format("MATRIX CALCULATOR", font="slant"))
+print("-----Enter Details of Matrix A -----")
+
+# --- Matrix A Input ---
+rows = int(input("Enter the number of rows for Matrix A: "))
+cols = int(input("Enter the number of columns for Matrix A: "))
+
+print("Enter the entries in a single line, separated by spaces (e.g., 1 2 3 4):")
+entries = list(map(int, input().split()))
+
+# Error checking for input size vs declared shape for Matrix A
+if len(entries) != rows * cols:
+    print(f"Error: Expected {rows * cols} entries for Matrix A but got {len(entries)}. Exiting.")
+    sys.exit()
+
+matrix = np.array(entries).reshape(rows, cols)
+print("\nThe entered matrix is A:")
+print(matrix)
+#Determinant of matrix A
+determinant_matrixA=np.linalg.det(matrix)
+
+# --- Matrix A Operations ---
+print("-----Operations for Matrix A-----")
+a=int(input("ENTER (1) IF YOU WANT INVERSE OF A MATRIX OTHERWISE (0):"))
+b=int(input("ENTER (1) IF YOU WANT DETERMINANT OF A MATRIX OTHERWISE (0):"))
+j=int(input("ENTER (1) IF YOU WANT TRANSPOSE OF MATRIX A  OTHERWISE (0):"))
+
+if(a==1):
+    if(determinant_matrixA!=0):
+        matrix_invA=np.linalg.inv(matrix)
+        print("The inverse matrix of A is\n",matrix_invA)
+    else:
+        print("Matrix A is singular. So Matrix A is not invertible.")
+if(b==1):
+         print("DETERMINANT OF A MATRIX IS",determinant_matrixA)
+#Transpose of Matrix A
+if(j==1):
+    A_transpose=matrix.transpose()
+    print("Transpose of Matrix A is\n",A_transpose)
+
+# --- Matrix B Input (if requested) ---
+print("-----Matrix B Details If Required-----")
+e=int(input("If you want to add one more matrix (1), otherwise (0): "))
+if(e==1):
+
+    rows1 = int(input("Enter the number of rows for Matrix B: "))
+    cols1 = int(input("Enter the number of columns for Matrix B: "))
+
+    print("Enter the entries for Matrix B in a single line, separated by spaces (e.g., 1 2 3 4):")
+    entries1 = list(map(int, input().split())) # Changed variable name to entries1 for clarity
+
+    # Error checking for input size vs declared shape
+    if len(entries1) != rows1 * cols1:
+        print(f"Error: Expected {rows1 * cols1} entries for Matrix B but got {len(entries1)}. Exiting.")
+        sys.exit()
+    else:
+        matrix1 = np.array(entries1).reshape(rows1, cols1)
+        print("\nThe entered matrix is B:")
+        print(matrix1)
+
+        # Determinant is only defined for square matrices
+        if rows1 == cols1:
+            determinant_matrixB=np.linalg.det(matrix1)
+        else:
+            determinant_matrixB = None # Set to None for non-square matrices
+            print("Matrix B is not square, determinant calculation is skipped.")
+
+        # --- Matrix B and Combined Operations ---
+        print("-----Matrix B and Combined Operations-----")
+        c=int(input("ENTER (1) IF YOU WANT INVERSE OF B MATRIX OTHERWISE (0):"))
+        d=int(input("ENTER (1) IF YOU WANT DETERMINANT OF B MATRIX OTHERWISE (0):"))
+        f=int(input("ENTER (1) IF YOU WANT Addition of Matrix A and B OTHERWISE (0):"))
+        g=int(input("ENTER (1) If YOU WANT Subtraction of Matrix A and B OTHERWISE (0):"))
+        h=int(input("ENTER (1) IF YOU WANT Multiplication of Matrix A and B OTHERWISE (0):"))
+        i=int(input(" ENTER (1) IF YOU WANT TRANSPOSE OF MATRIX B AND OTHERWISE (0):"))
+        k=int(input("TO CHECK WHETHER MATRIX A AND B ARE IDENTICAL (1),OTHERWISE(0):"))
+        # Inverse B
+        if(c==1):
+            if(rows1 == cols1 and determinant_matrixB!=0):
+                matrix_invB=np.linalg.inv(matrix1)
+                print("The inverse matrix of B is\n",matrix_invB)
+            else:
+                print("Matrix B is not invertible (either not square or determinant is zero).")
+
+        # Determinant B
+        if(d==1):
+            if determinant_matrixB is not None:
+                print("Determinant of B Matrix is ",determinant_matrixB)
+
+        # Addition
+        if(f==1):
+            if (rows == rows1 and cols == cols1):
+                matrix3=matrix+matrix1
+                print("The sum of Matrix A and B is\n",matrix3)
+            else:
+                print("Matrix addition is not possible. Matrices must have the same dimensions.")
+
+        # Subtraction
+        if(g==1):
+            if (rows == rows1 and cols == cols1):
+                matrix4=matrix-matrix1
+                print("The Subtraction of Matrix A and B is\n",matrix4)
+            else:
+                print("Matrix subtraction is not possible. Matrices must have the same dimensions.")
+
+        # Multiplication
+        if(h==1):
+            if (cols==rows1):
+                # Use the NumPy matrix multiplication operator '@'
+                result_matrix = matrix @ matrix1
+                print("The Multiplication of A and B is\n", result_matrix)
+            else:
+                print("Matrix multiplication is not possible. Number of columns in Matrix A must equal the number of rows in Matrix B.")
+        #Transpose of Matrix B
+        if(i==1):
+            B_transpose=matrix1.transpose()
+            print("Transpose of Matrix B \n",B_transpose)
+        #Whether Matrix A and B are Identical
+        if(k==1):
+            if (rows == rows1 and cols == cols1):
+                if np.array_equal(matrix, matrix1):
+                    print("Matrix A and B are Identical ")
+                else:
+                    print("Matrix A and B are not Identical")
+            else:
+                print("Matrix A and B cannot be identical because their dimensions differ.")
+print("--------Thank You for using Matrix Calculator----------")
